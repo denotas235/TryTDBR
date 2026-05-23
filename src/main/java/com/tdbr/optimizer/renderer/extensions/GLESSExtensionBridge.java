@@ -1,7 +1,6 @@
 package com.tdbr.optimizer.renderer.extensions;
 
 import com.tdbr.optimizer.TDBROptimizerClientMod;
-import org.lwjgl.egl.EGL;
 
 public class GLESSExtensionBridge {
 
@@ -15,14 +14,7 @@ public class GLESSExtensionBridge {
             TDBROptimizerClientMod.LOGGER.info("Contexto nao e GLES. Pulando EGL bridge.");
             return;
         }
-        TDBROptimizerClientMod.LOGGER.info("Contexto GLES detectado. Verificando EGL proc addresses...");
-        long ptr = EGL.getProcedureAddress("glFramebufferFetchBarrierEXT");
-        if (ptr != 0) {
-            TDBROptimizerClientMod.LOGGER.info("glFramebufferFetchBarrierEXT disponivel em EGL!");
-        }
-        long ptr2 = EGL.getProcedureAddress("glPixelLocalStorageBarrierEXT");
-        if (ptr2 != 0) {
-            TDBROptimizerClientMod.LOGGER.info("glPixelLocalStorageBarrierEXT disponivel em EGL!");
-        }
+        TDBROptimizerClientMod.LOGGER.info("Contexto GLES detectado.");
+        // EGL calls removidos - nao disponiveis em desktop OpenGL
     }
 }
