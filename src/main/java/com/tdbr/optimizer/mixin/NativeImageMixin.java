@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class NativeImageMixin {
 
     @Inject(method = "read(Ljava/io/InputStream;)Lnet/minecraft/client/texture/NativeImage;", at = @At("HEAD"), cancellable = true)
-    private static void onRead(InputStream stream, CallbackInfoReturnable<<NativeImage> cir) throws IOException {
+    private static void onRead(InputStream stream, CallbackInfoReturnable<NativeImage> cir) throws IOException {
         if (!TDBRDetector.HAS_ASTC_LDR && !TDBRDetector.HAS_ASTC_HDR) return;
         stream.mark(16);
         byte[] magic = new byte[4];

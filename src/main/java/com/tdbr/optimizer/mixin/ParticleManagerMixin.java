@@ -16,7 +16,7 @@ import java.util.Queue;
 public class ParticleManagerMixin {
 
     @Shadow
-    private Queue<<Particle> particles;
+    private Queue<Particle> particles;
 
     @Inject(method = "addParticle(Lnet/minecraft/client/particle/Particle;)V", at = @At("HEAD"), cancellable = true)
     private void onAddParticle(Particle particle, CallbackInfo ci) {
