@@ -1,0 +1,49 @@
+name: Build TDBR Optimizer
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.8'
+        
+    - name: Build with Gradle
+      run: ./gradlew build --no-daemon
+      
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tdbr-optimizer-jar
+        path: build/libs/*.jar
+        
+    - name: Create Release
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/libs/tdbr-optimizer-1.0.0.jar
+        tag_name: v1.0.0
+        name: TDBR Optimizer v1.0.0
+        body: |
+          Mod otimizado para GPUs Tile-Based (Mali G52/Immortalis)
+          - Detecção automática de extensões GLES
+          - Redução de overdraw
+          - Culling de partículas
+          - Suporte ASTC
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
