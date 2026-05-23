@@ -18,7 +18,7 @@ public class TDBRASTCTextureLoader {
 
     public static boolean tryLoadASTC(TextureManager manager, Identifier id) {
         if (!TDBRDetector.HAS_ASTC_LDR && !TDBRDetector.HAS_ASTC_HDR) return false;
-        Identifier astcId = new Identifier(id.getNamespace(), 
+        Identifier astcId = Identifier.of(id.getNamespace(), 
             id.getPath().replace(".png", ".astc"));
         var resourceManager = MinecraftClient.getInstance().getResourceManager();
         if (resourceManager.getResource(astcId).isPresent()) {

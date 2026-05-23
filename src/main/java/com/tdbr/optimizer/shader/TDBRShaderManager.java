@@ -7,31 +7,22 @@ import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
 
-import java.io.IOException;
-
 public class TDBRShaderManager {
 
     public static ShaderProgram TDBR_TRANSLUCENT_SHADER;
 
     public static void register() {
-        CoreShaderRegistrationCallback.EVENT.register((resourceFactory, register) -> {
-            try {
-                register.accept(
-                    new Identifier("tdbr-optimizer", "core/tdbr_translucent"),
-                    VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL
-                );
-                TDBROptimizerClientMod.LOGGER.info("TDBR Translucent Shader registrado.");
-            } catch (IOException e) {
-                TDBROptimizerClientMod.LOGGER.error("Falha ao registrar shader TDBR", e);
-            }
+        CoreShaderRegistrationCallback.EVENT.register(context -> {
+            context.register(
+                Identifier.of("tdbr-optimizer", "core/tdbr_translucent"),
+                VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
+                program -> {
+                    TDBR_TRANSLUCENT_SHADER = program;
+                    TDBROptimizerClientMod.LOGGER.info("TDBR Translucent Shader carregado! FB Fetch: {}", 
+                        TDBRDetector.HAS_FRAMEBUFFER_FETCH);
+                }
+            );
+            TDBROptimizerClientMod.LOGGER.info("TDBR Translucent Shader registrado.");
         });
-    }
-
-    public static void onShaderLoad(ShaderProgram program) {
-        if (program.getName().equals("tdbr-optimizer/core/tdbr_translucent")) {
-            TDBR_TRANSLUCENT_SHADER = program;
-            TDBROptimizerClientMod.LOGGER.info("TDBR Translucent Shader carregado! FB Fetch: {}", 
-                TDBRDetector.HAS_FRAMEBUFFER_FETCH);
-        }
     }
 }
